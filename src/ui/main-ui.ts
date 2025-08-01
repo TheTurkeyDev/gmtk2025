@@ -38,8 +38,8 @@ export class MainUI implements UI {
         ctx.textBaseline = 'middle';
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 2;
-        ctx.fillText('GAME NAME', canvas.width / 2, 100);
-        ctx.strokeText('GAME NAME', canvas.width / 2, 100);
+        ctx.fillText('PUTT-LIKE', canvas.width / 2, 100);
+        ctx.strokeText('PUTT-LIKE', canvas.width / 2, 100);
 
         this.buttons.forEach(b => b.render(ctx));
     }

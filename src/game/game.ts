@@ -12,6 +12,7 @@ import { drawWall } from '../types/wall';
 import { drawWaterHazard } from '../types/water-hazard';
 import { openUI } from '../main';
 import { ShopUI } from '../ui/shop-ui';
+import { coinPickupSound, golfBallInHoleSound, golfBallWaterSound, golfPuttSound } from '../audio/sounds';
 
 export class Game {
     ballLastHitPos: Position = { x: 0, y: 0 };
@@ -46,8 +47,8 @@ export class Game {
             return;
 
         const shotInfo = this.calcShotInfo();
-        this.ball.vx = -Math.cos(shotInfo.angle) * shotInfo.power * gameSettings.maxDragDist * gameSettings.shotStrength;
-        this.ball.vy = -Math.sin(shotInfo.angle) * shotInfo.power * gameSettings.maxDragDist * gameSettings.shotStrength;
+        this.ball.vx = -Math.cos(shotInfo.angle) * shotInfo.power * gameSettings.shotStrength;
+        this.ball.vy = -Math.sin(shotInfo.angle) * shotInfo.power * gameSettings.shotStrength;
 
         this.ball.isMoving = true;
         this.ballLastHitPos.x = this.ball.x;
@@ -56,6 +57,7 @@ export class Game {
 
         this.isDragging = false;
         canvas.style.cursor = 'crosshair';
+        golfPuttSound.play();
     }
 
     public mouseMove(event: MouseEvent, canvas: HTMLCanvasElement) {
@@ -66,7 +68,7 @@ export class Game {
         this.mCurr = { x: event.clientX - rect.left, y: event.clientY - rect.top };
     }
 
-    public render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+    public render(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, timestamp: number) {
         if (!this.room)
             return;
 
@@ -93,7 +95,7 @@ export class Game {
         ctx.save();
         if (this.roomChanging)
             ctx.translate(this.roomOffset.x, this.roomOffset.y);
-        this.renderRoom(ctx, this.room, !this.roomChanging);
+        this.renderRoom(ctx, timestamp, this.room, !this.roomChanging);
         ctx.restore();
 
         if (this.roomChanging && this.nextRoom) {
@@ -102,12 +104,12 @@ export class Game {
                 this.roomOffset.x + (this.roomOffsetDir.x > 0 ? -canvas.width : (this.roomOffsetDir.x < 0 ? canvas.width : 0)),
                 this.roomOffset.y + (this.roomOffsetDir.y > 0 ? -canvas.height : (this.roomOffsetDir.y < 0 ? canvas.height : 0))
             );
-            this.renderRoom(ctx, this.nextRoom, true);
+            this.renderRoom(ctx, timestamp, this.nextRoom, true);
             ctx.restore();
         }
     }
 
-    renderRoom(ctx: CanvasRenderingContext2D, room: Room, renderBall: boolean) {
+    renderRoom(ctx: CanvasRenderingContext2D, timestamp: number, room: Room, renderBall: boolean) {
         //Walls
         ctx.strokeStyle = '#8B4513';
         ctx.lineWidth = 8;
@@ -118,7 +120,7 @@ export class Game {
         room.sand.forEach(sand => drawSandTrap(sand, ctx));
 
         //Water Hazards
-        room.water.forEach(water => drawWaterHazard(water, ctx));
+        room.water.forEach(water => drawWaterHazard(water, ctx, timestamp));
 
         // Holes
         room.holes.forEach(hole => drawHole(hole, ctx));
@@ -138,7 +140,7 @@ export class Game {
             const dragDistance = Math.sqrt(dragX * dragX + dragY * dragY);
 
             // Clamp to max distance
-            const clampedDistance = Math.min(dragDistance, gameSettings.maxDragDist * gameSettings.shotStrength);
+            const clampedDistance = Math.min(dragDistance, gameSettings.maxDragDist);
             const clampedDragX = dragDistance > 0 ? (dragX / dragDistance) * clampedDistance : 0;
             const clampedDragY = dragDistance > 0 ? (dragY / dragDistance) * clampedDistance : 0;
 
@@ -162,7 +164,7 @@ export class Game {
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
-                ctx.arc(this.ball.x, this.ball.y, gameSettings.maxDragDist * gameSettings.shotStrength, 0, 2 * Math.PI);
+                ctx.arc(this.ball.x, this.ball.y, gameSettings.maxDragDist, 0, 2 * Math.PI);
                 ctx.stroke();
             }
         }
@@ -201,6 +203,9 @@ export class Game {
             });
 
             this.room.coins = this.room.coins.filter(c => !toCollect.find(cc => cc.x === c.x && cc.y === c.y));
+            if (!coinPickupSound.paused)
+                coinPickupSound.currentTime = 0;
+            coinPickupSound.play();
         }
 
         // Check for wall collisions along the movement path
@@ -223,6 +228,7 @@ export class Game {
         const inWaterHazard = this.room?.water?.some(w => pointInPolygon(this.ball.x, this.ball.y, w.points)) ?? false;
 
         if (inWaterHazard) {
+            golfBallWaterSound.play();
             this.ball.x = this.ballLastHitPos.x;
             this.ball.y = this.ballLastHitPos.y;
             this.ball.vx = 0;
@@ -254,6 +260,7 @@ export class Game {
             const holeSize = hole.size + gameSettings.holeSizeInc;
             const hr = (holeSize - (this.ball.size / 2));
             if (distToHole < hr) {
+                golfBallInHoleSound.play();
                 this.ball.vx = 0;
                 this.ball.vy = 0;
                 this.ball.isMoving = false;
@@ -299,7 +306,7 @@ export class Game {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         // from 0 to 1
-        const power = Math.min(distance / (gameSettings.maxDragDist * gameSettings.shotStrength), 1);
+        const power = Math.min(distance / gameSettings.maxDragDist, 1);
         const angle = Math.atan2(dy, dx);
         return { power, angle, distance };
     }

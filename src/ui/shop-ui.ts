@@ -65,7 +65,7 @@ export class ShopUI implements UI {
 
     upgrades: ShopUpgrade[] = [
         new ShopUpgrade(0, 'Hole Size', 200, 200, gameSettingsDef.holeSizeInc.initial, 1, gameSettingsDef.holeSizeInc.max, 5, 500, () => gameSettings.holeSizeInc),
-        new ShopUpgrade(1, 'Shot Power', 400, 200, gameSettingsDef.shotStrength.initial, 0.05, gameSettingsDef.shotStrength.max, 1, 100, () => gameSettings.shotStrength),
+        new ShopUpgrade(1, 'Shot Power', 400, 200, gameSettingsDef.shotStrength.initial, 1, gameSettingsDef.shotStrength.max, 1, 100, () => gameSettings.shotStrength),
         new ShopUpgrade(2, 'Friction Slow', 600, 200, gameSettingsDef.friction.initial, 0.001, gameSettingsDef.friction.max, 2, 100, () => gameSettings.friction),
         new ShopUpgrade(3, 'Bunker Slow', 800, 200, gameSettingsDef.sandFriction.initial, 0.001, gameSettingsDef.sandFriction.max, 5, 75, () => gameSettings.sandFriction),
         new ShopUpgrade(4, 'Wall Bounce Loss', 200, 400, gameSettingsDef.wallEnergyLoss.initial, 0.01, gameSettingsDef.wallEnergyLoss.max, 1, 200, () => gameSettings.wallEnergyLoss),
@@ -73,7 +73,10 @@ export class ShopUI implements UI {
     ];
 
     buttons: Button[] = [
-        new Button(400, 600, 200, 50, '#145890ff', 'CONTINUE', '#ffffff', 20, () => closeUI())
+        new Button(400, 600, 200, 50, '#145890ff', 'CONTINUE', '#ffffff', 20, () => {
+            playerInfo.strokesLeft = playerInfo.totalStrokes;
+            closeUI();
+        })
     ];
 
     mouseDown(event: MouseEvent, canvas: HTMLCanvasElement) {

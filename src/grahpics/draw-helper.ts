@@ -7,7 +7,6 @@ export function drawStar(ctx: CanvasRenderingContext2D, cx: number, cy: number, 
     ctx.beginPath();
     ctx.moveTo(cx, cy - outerRadius);
 
-    // eslint-disable-next-line functional/no-loop-statements
     for (let i = 0; i < spikes; i++) {
         x = cx + Math.cos(rot) * outerRadius;
         y = cy + Math.sin(rot) * outerRadius;

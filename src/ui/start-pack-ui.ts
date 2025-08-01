@@ -1,4 +1,4 @@
-import { gameSettings, resetGameSettings, resetPlayerInfo } from '../game/game-info';
+import { gameSettings, gameSettingsDef, resetGameSettings, resetPlayerInfo } from '../game/game-info';
 import { closeUI } from '../main';
 import { BoundingBox } from '../types/bounding-box';
 import type { UI } from './ui-type';
@@ -44,14 +44,21 @@ export class StartPackUI implements UI {
                 //TODO: Anything?
             }
             else if (clicked.id === 1) {
-                gameSettings.shotStrength = 0.1;
+                gameSettingsDef.shotStrength.initial = 10;
+                gameSettings.shotStrength = 10;
+                gameSettingsDef.friction.initial = 0.985;
                 gameSettings.friction = 0.985;
+                gameSettingsDef.sandFriction.initial = 0.9;
                 gameSettings.sandFriction = 0.9;
+                gameSettingsDef.wallEnergyLoss.initial = 0.7;
                 gameSettings.wallEnergyLoss = 0.7;
             }
             else if (clicked.id === 2) {
-                gameSettings.shotStrength = 0.4;
+                gameSettingsDef.shotStrength.initial = 50;
+                gameSettings.shotStrength = 50;
+                gameSettingsDef.holeSizeInc.initial = 10;
                 gameSettings.holeSizeInc = 10;
+                gameSettingsDef.wallEnergyLoss.initial = 0.1;
                 gameSettings.wallEnergyLoss = 0.1;
             }
             closeUI();

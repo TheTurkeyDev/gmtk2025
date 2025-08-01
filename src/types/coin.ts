@@ -25,6 +25,11 @@ export function drawCoin(coin: Coin, ctx: CanvasRenderingContext2D) {
 }
 
 export function drawGoldCoin(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+    ctx.beginPath();
+    ctx.ellipse(x, y + 13, size / 1.1, 3, 0, 0, 2 * Math.PI);
+    ctx.fillStyle = '#22222288';
+    ctx.fill();
+
     // Outer ring
     ctx.beginPath();
     ctx.arc(x, y, size, 0, 2 * Math.PI);
@@ -45,11 +50,17 @@ export function drawGoldCoin(ctx: CanvasRenderingContext2D, x: number, y: number
     ctx.font = `${size * 0.8}px "Libre Baskerville"`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('$', x, y);
+    ctx.fillText('$', x, y + 1);
 }
 
 // Silver Coin with Star
 export function drawSilverCoin(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+    ctx.beginPath();
+    ctx.ellipse(x, y + 13, size / 1.1, 3, 0, 0, 2 * Math.PI);
+    ctx.fillStyle = '#22222288';
+    ctx.fill();
+
+
     // Main body
     ctx.beginPath();
     ctx.arc(x, y, size, 0, 2 * Math.PI);
@@ -74,6 +85,12 @@ export function drawSilverCoin(ctx: CanvasRenderingContext2D, x: number, y: numb
 
 // Glowing Power Coin
 export function drawGlowCoin(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+    ctx.beginPath();
+    ctx.ellipse(x, y + 13, size / 1.1, 3, 0, 0, 2 * Math.PI);
+    ctx.fillStyle = '#22222288';
+    ctx.fill();
+
+
     // Glow effect
     const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 1.5);
     gradient.addColorStop(0, 'rgba(0, 255, 255, 0.3)');
@@ -113,6 +130,11 @@ export function drawGlowCoin(ctx: CanvasRenderingContext2D, x: number, y: number
 }
 
 export function drawGemCoin(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+    ctx.beginPath();
+    ctx.ellipse(x, y + 13, size / 1.1, 3, 0, 0, 2 * Math.PI);
+    ctx.fillStyle = '#22222288';
+    ctx.fill();
+
     // Base coin
     ctx.beginPath();
     ctx.arc(x, y, size, 0, 2 * Math.PI);
@@ -126,7 +148,7 @@ export function drawGemCoin(ctx: CanvasRenderingContext2D, x: number, y: number,
     const gemRadius = size * 0.6;
     const sides = 6;
     ctx.beginPath();
-     
+
     for (let i = 0; i < sides; i++) {
         const angle = (i / sides) * Math.PI * 2;
         const gemX = x + Math.cos(angle) * gemRadius;
@@ -143,7 +165,7 @@ export function drawGemCoin(ctx: CanvasRenderingContext2D, x: number, y: number,
 
     // Inner gem highlight
     ctx.beginPath();
-     
+
     for (let i = 0; i < sides; i++) {
         const angle = (i / sides) * Math.PI * 2;
         const gemX = x + Math.cos(angle) * gemRadius * 0.5;

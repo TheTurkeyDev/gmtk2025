@@ -1,8 +1,8 @@
 export const gameSettingsDef = {
     maxDragDist: {
-        initial: 100,
+        initial: 50,
         min: 0,
-        max: 1000
+        max: 500
     },
     friction: {
         initial: 0.93,
@@ -15,9 +15,9 @@ export const gameSettingsDef = {
         max: 1
     },
     shotStrength: {
-        initial: 0.2,
-        min: 0.01,
-        max: 1
+        initial: 30,
+        min: 0,
+        max: 100
     },
     wallEnergyLoss: {
         initial: 0.3,

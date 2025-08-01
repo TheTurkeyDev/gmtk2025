@@ -19,7 +19,7 @@ function getBounds(points: Position[]) {
     return { minX, minY, maxX, maxY };
 }
 
-export function drawWaterHazard(water: WaterHazard, ctx: CanvasRenderingContext2D) {
+export function drawWaterHazard(water: WaterHazard, ctx: CanvasRenderingContext2D, timestamp: number) {
     ctx.beginPath();
     water.points.forEach((p, i) => {
         if (i === 0)
@@ -43,7 +43,7 @@ export function drawWaterHazard(water: WaterHazard, ctx: CanvasRenderingContext2
         let startX = null;
         for (let x = bounds.minX; x <= bounds.maxX; x += 2) {
             if (pointInPolygon(x, y, water.points)) {
-                const waveY = y + Math.sin(x * 0.1) * 2;
+                const waveY = y + Math.sin((x * 0.1) + (timestamp * 0.005)) * 2;
                 if (startX === null) {
                     ctx.moveTo(x, waveY);
                     startX = x;

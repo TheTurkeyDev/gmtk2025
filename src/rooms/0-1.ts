@@ -2,7 +2,7 @@ import type { Room } from '../types/room';
 
 const roomData: Room = {
     holes: [
-        { dir: 'right', x: 975, y: 350, size: 10 },
+        { dir: 'down', x: 550, y: 625, size: 10 },
     ],
     walls: [
         { x1: 50, y1: 50, x2: 1025, y2: 50 },
@@ -11,19 +11,11 @@ const roomData: Room = {
         { x1: 1025, y1: 50, x2: 1025, y2: 675 },
     ],
     coins: [
-        { type: 0, x: 400, y: 350, size: 10 },
     ],
     sand: [
-        {
-            points: [
-                {x: 100, y: 100},
-                {x: 300, y: 100},
-                {x: 300, y: 300},
-                {x: 100, y: 300},
-            ]
-        }
     ],
-    water: [],
+    water: [
+    ]
 };
 
 export default roomData;

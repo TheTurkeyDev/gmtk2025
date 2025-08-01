@@ -1,4 +1,4 @@
-import { gameSettings } from '../game-info';
+import { gameSettings } from '../game/game-info';
 import type { Ball } from '../types/ball';
 import type { Position } from '../types/position';
 import type { Wall } from '../types/wall';
@@ -48,8 +48,8 @@ export function checkContinuousWallCollisions(walls: Wall[], ball: Ball, newX: n
         return {
             x: closestCollision.contactX + normalX * (ball.size + 0.1), // Push slightly away from wall
             y: closestCollision.contactY + normalY * (ball.size + 0.1),
-            vx: reflectedVx * -gameSettings.wallEnergyLoss,
-            vy: reflectedVy * -gameSettings.wallEnergyLoss
+            vx: reflectedVx * gameSettings.wallEnergyLoss,
+            vy: reflectedVy * gameSettings.wallEnergyLoss
         };
     }
 
@@ -80,7 +80,7 @@ function getMovingCircleLineCollision(x1: number, y1: number, x2: number, y2: nu
     let contactPoint: Position | null = null;
 
     // Check collision with the main line segment (expanded by radius)
-    // eslint-disable-next-line functional/no-loop-statements
+
     for (let step = 0; step <= 100; step++) {
         const t = step / 100;
         const checkX = x1 + dx * t;
@@ -136,4 +136,22 @@ export function circleIntersectsLine(circleX: number, circleY: number, radius: n
     const closestX = x1 + t * dx;
     const closestY = y1 + t * dy;
     return Math.sqrt(Math.pow(circleX - closestX, 2) + Math.pow(circleY - closestY, 2)) <= radius;
+}
+
+export function pointInPolygon(x: number, y: number, polygon: Position[]) {
+    let inside = false;
+
+    //ngl, ai recommended this loop definition and it's kinda cool, but no chance I would have come up with it
+    //j simply is the index before i
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].x;
+        const yi = polygon[i].y;
+        const xj = polygon[j].x;
+        const yj = polygon[j].y;
+
+        if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi))
+            inside = !inside;
+    }
+
+    return inside;
 }

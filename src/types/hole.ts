@@ -1,25 +1,31 @@
+import { gameSettings } from '../game/game-info';
+import type { DirectionType } from './direction';
+
 export type Hole = {
-    id: string
+    dir: DirectionType
     x: number,
     y: number,
     size: number,
 }
 
 export function drawHole(hole: Hole, ctx: CanvasRenderingContext2D) {
+    const size = hole.size + gameSettings.holeSizeInc;
     ctx.beginPath();
-    ctx.arc(hole.x, hole.y, hole.size, 0, 2 * Math.PI);
+    ctx.arc(hole.x, hole.y,size, 0, 2 * Math.PI);
     ctx.fillStyle = '#ddd';
     ctx.fill();
     ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = size / 5;
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(hole.x, hole.y, 2, 0, 2 * Math.PI);
+    ctx.arc(hole.x, hole.y, size / 5, 0, 2 * Math.PI);
     ctx.fillStyle = '#222';
     ctx.fill();
     ctx.beginPath();
-    ctx.fillRect(hole.x - 2, hole.y - 9, 4, 5);
-    ctx.fillRect(hole.x - 2, hole.y + 4, 4, 5);
-    ctx.fillRect(hole.x - 9, hole.y - 2, 5, 4);
-    ctx.fillRect(hole.x + 4, hole.y - 2, 5, 4);
+    const width = size / 2.5;
+    const length = size / 2;
+    ctx.fillRect(hole.x - (width / 2), hole.y - ((length * 2) - 1), width, length);
+    ctx.fillRect(hole.x - (width / 2), hole.y + width, width, length);
+    ctx.fillRect(hole.x - ((length * 2) - 1), hole.y - (width / 2), length, width);
+    ctx.fillRect(hole.x + width, hole.y - (width / 2), length, width);
 }

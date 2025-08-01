@@ -1,9 +1,13 @@
 import type { Coin } from './coin';
 import type { Hole } from './hole';
+import type { SandTrap } from './sand-trap';
 import type { Wall } from './wall';
+import type { WaterHazard } from './water-hazard';
 
 export type Room = {
     holes: Hole[],
     walls: Wall[],
-    coins: Coin[]
+    coins: Coin[],
+    sand: SandTrap[],
+    water: WaterHazard[]
 }

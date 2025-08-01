@@ -42,7 +42,7 @@ export function drawGoldCoin(ctx: CanvasRenderingContext2D, x: number, y: number
 
     // Center dollar sign
     ctx.fillStyle = '#090909ff';
-    ctx.font = `${size * 0.8}px Arial`;
+    ctx.font = `${size * 0.8}px "Libre Baskerville"`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('$', x, y);
@@ -126,7 +126,7 @@ export function drawGemCoin(ctx: CanvasRenderingContext2D, x: number, y: number,
     const gemRadius = size * 0.6;
     const sides = 6;
     ctx.beginPath();
-    // eslint-disable-next-line functional/no-loop-statements
+     
     for (let i = 0; i < sides; i++) {
         const angle = (i / sides) * Math.PI * 2;
         const gemX = x + Math.cos(angle) * gemRadius;
@@ -143,7 +143,7 @@ export function drawGemCoin(ctx: CanvasRenderingContext2D, x: number, y: number,
 
     // Inner gem highlight
     ctx.beginPath();
-    // eslint-disable-next-line functional/no-loop-statements
+     
     for (let i = 0; i < sides; i++) {
         const angle = (i / sides) * Math.PI * 2;
         const gemX = x + Math.cos(angle) * gemRadius * 0.5;
@@ -181,7 +181,7 @@ export function drawSpinningCoin(ctx: CanvasRenderingContext2D, x: number, y: nu
         ctx.fill();
 
         ctx.fillStyle = '#8B7355';
-        ctx.font = `${size * 0.8}px Arial`;
+        ctx.font = `${size * 0.8}px "Libre Baskerville"`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('$', 0, 0);

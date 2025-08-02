@@ -4,6 +4,7 @@ import course1H2 from './classic/classic-2';
 import course1H3 from './classic/classic-3';
 import course1H4 from './classic/classic-4';
 import course1H5 from './classic/classic-5';
+import course1H6 from './classic/classic-6';
 import mainRoom from './main-room';
 
 export function loadCourseHole(courseID: number, holeNum: number): CourseHole | null {
@@ -19,6 +20,8 @@ export function loadCourseHole(courseID: number, holeNum: number): CourseHole | 
             return { ...course1H4 };
         if (holeNum === 5)
             return { ...course1H5 };
+        if (holeNum === 6)
+            return { ...course1H6 };
     }
     return mainRoom;
 }

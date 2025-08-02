@@ -4,7 +4,7 @@ const course1H5: CourseHole = {
     teeBox: { x: 100, y: 250 },
     holes: [
         {
-            nextHole: { courseId: 1, holeNum: 5 },
+            nextHole: { courseId: 1, holeNum: 6 },
             x: 100,
             y: 450,
             size: 10,

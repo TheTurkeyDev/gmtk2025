@@ -254,7 +254,7 @@ export class Game {
         this.ball.vx *= frictionFactor;
         this.ball.vy *= frictionFactor;
 
-        // Bounce off walls
+        // Bounce off max frame
         if (this.ball.x - this.ball.size <= 0 || this.ball.x + this.ball.size >= width) {
             this.ball.vx *= -gameSettings.wallEnergyLoss;
             this.ball.x = Math.max(this.ball.size, Math.min(width - this.ball.size, this.ball.x));
@@ -339,8 +339,8 @@ export class Game {
     resetToStart() {
         const newRoom = loadCourseHole(0, 0);
         this.courseHoleId = { courseId: -1, holeNum: -1 };
-        // const newRoom = loadCourseHole(1, 4);
-        // this.courseHoleId = { courseId: 1, holeNum: 4 };
+        // const newRoom = loadCourseHole(1, 5);
+        // this.courseHoleId = { courseId: 1, holeNum: 5 };
         if (newRoom)
             this.courseHole = newRoom;
 

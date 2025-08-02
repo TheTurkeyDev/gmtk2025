@@ -45,11 +45,28 @@ export function checkContinuousWallCollisions(walls: Wall[], ball: Ball, newX: n
         const reflectedVx = ball.vx - 2 * dotProduct * normalX;
         const reflectedVy = ball.vy - 2 * dotProduct * normalY;
 
+
+        // Normalize velocity vector
+        const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+        const unitVx = ball.vx / speed;
+        const unitVy = ball.vy / speed;
+
+        // Impact severity based on angle to wall normal
+        // Between 0 and 1
+        const impactAngle = Math.abs(unitVx * normalX + unitVy * normalY);
+
+        // Glancing hit (almost full energy retained)
+        const minLoss = 0.95;
+
+        // Direct hit
+        const maxLoss = gameSettings.wallEnergyLoss;
+        const energyLossFactor = minLoss + (maxLoss - minLoss) * impactAngle;
+
         return {
             x: closestCollision.contactX + normalX * (ball.size + 0.1), // Push slightly away from wall
             y: closestCollision.contactY + normalY * (ball.size + 0.1),
-            vx: reflectedVx * gameSettings.wallEnergyLoss,
-            vy: reflectedVy * gameSettings.wallEnergyLoss
+            vx: reflectedVx * energyLossFactor,
+            vy: reflectedVy * energyLossFactor
         };
     }
 

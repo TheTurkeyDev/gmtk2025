@@ -40,7 +40,15 @@ const course1H1: CourseHole = {
         { type: 0, x: 875, y: 550, size: 10 }
     ],
     sand: [],
-    water: []
+    water: [],
+    text: [
+        {
+            text: 'Hole 1: Straight Away',
+            x: 200,
+            y: 150,
+            size: 18
+        }
+    ]
 };
 
 export default course1H1;

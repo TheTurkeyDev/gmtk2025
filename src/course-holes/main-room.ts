@@ -13,7 +13,21 @@ const roomData: CourseHole = {
     ],
     coins: [],
     sand: [],
-    water: []
+    water: [],
+    text: [
+        {
+            text: 'Classic Course',
+            x: 125,
+            y: 325,
+            size: 18
+        },
+        {
+            text: '↓ Click on the ball & drag to aim and shoot!',
+            x: 695,
+            y: 340,
+            size: 18
+        }
+    ]
 };
 
 export default roomData;

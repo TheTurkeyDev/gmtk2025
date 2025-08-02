@@ -1,5 +1,6 @@
 import type { Coin } from './coin';
 import type { Hole } from './hole';
+import type { HoleText } from './hole-text';
 import type { Position } from './position';
 import type { SandTrap } from './sand-trap';
 import type { Wall } from './wall';
@@ -11,5 +12,6 @@ export type CourseHole = {
     walls: Wall[],
     coins: Coin[],
     sand: SandTrap[],
-    water: WaterHazard[]
+    water: WaterHazard[],
+    text: HoleText[]
 }

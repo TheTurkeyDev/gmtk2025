@@ -38,7 +38,15 @@ const course1H2: CourseHole = {
             ]
         }
     ],
-    water: []
+    water: [],
+    text: [
+        {
+            text: 'Hole 2: The Angle',
+            x: 500,
+            y: 550,
+            size: 18
+        }
+    ]
 };
 
 export default course1H2;

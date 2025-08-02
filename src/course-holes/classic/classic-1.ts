@@ -37,7 +37,8 @@ const course1H1: CourseHole = {
     ],
     coins: [
         { type: 0, x: 875, y: 175, size: 10 },
-        { type: 0, x: 875, y: 550, size: 10 }
+        { type: 0, x: 875, y: 550, size: 10 },
+        { type: 0, x: 150, y: 360, size: 10 }
     ],
     sand: [],
     water: [],

@@ -16,11 +16,11 @@ class ShopUpgrade {
     startCost: number;
     maxCost: number;
     private update: () => number;
-
+    private customDisplayValue?: (value: number) => string;
     value: number = 0;
     disabled: boolean = false;
 
-    constructor(id: number, name: string, x: number, y: number, initialValue: number, step: number, max: number, startCost: number, maxCost: number, update: () => number) {
+    constructor(id: number, name: string, x: number, y: number, initialValue: number, step: number, max: number, startCost: number, maxCost: number, update: () => number, customDisplayValue?: (value: number) => string) {
         this.id = id;
         this.name = name;
         this.x = x;
@@ -31,7 +31,12 @@ class ShopUpgrade {
         this.startCost = startCost;
         this.maxCost = maxCost;
         this.update = update;
+        this.customDisplayValue = customDisplayValue;
         this.updateValue();
+    }
+
+    getDisplayValue() {
+        return this.customDisplayValue ? this.customDisplayValue(this.value) : this.value.toFixed(this.step < 1 ? 2 : 0);
     }
 
 
@@ -66,9 +71,9 @@ export class ShopUI implements UI {
     upgrades: ShopUpgrade[] = [
         new ShopUpgrade(0, 'Hole Size', 200, 200, gameSettingsDef.holeSizeInc.initial, 1, gameSettingsDef.holeSizeInc.max, 5, 500, () => gameSettings.holeSizeInc),
         new ShopUpgrade(1, 'Shot Power', 400, 200, gameSettingsDef.shotStrength.initial, 1, gameSettingsDef.shotStrength.max, 1, 100, () => gameSettings.shotStrength),
-        new ShopUpgrade(2, 'Friction Slow', 600, 200, gameSettingsDef.friction.initial, 0.001, gameSettingsDef.friction.max, 2, 100, () => gameSettings.friction),
-        new ShopUpgrade(3, 'Bunker Slow', 800, 200, gameSettingsDef.sandFriction.initial, 0.001, gameSettingsDef.sandFriction.max, 5, 75, () => gameSettings.sandFriction),
-        new ShopUpgrade(4, 'Wall Bounce Loss', 200, 400, gameSettingsDef.wallEnergyLoss.initial, 0.01, gameSettingsDef.wallEnergyLoss.max, 1, 200, () => gameSettings.wallEnergyLoss),
+        new ShopUpgrade(2, 'Friction %', 600, 200, gameSettingsDef.friction.initial, 0.001, gameSettingsDef.friction.max, 2, 100, () => gameSettings.friction, (value) => `${((1 - value) * 100).toFixed(1)}%`),
+        new ShopUpgrade(3, 'Bunker Friction %', 800, 200, gameSettingsDef.sandFriction.initial, 0.005, gameSettingsDef.sandFriction.max, 5, 75, () => gameSettings.sandFriction, (value) => `${((1 - value) * 100).toFixed(1)}%`),
+        new ShopUpgrade(4, 'Wall Bounce Loss %', 200, 400, gameSettingsDef.wallEnergyLoss.initial, 0.01, gameSettingsDef.wallEnergyLoss.max, 1, 200, () => gameSettings.wallEnergyLoss, (value) => `${((1 - value) * 100).toFixed(1)}%`),
         new ShopUpgrade(5, 'Strokes', 400, 400, playerInfoDef.totalStrokes, 1, 999, 1, 1000, () => playerInfo.totalStrokes)
     ];
 
@@ -150,9 +155,9 @@ export class ShopUI implements UI {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(u.name, u.x + hw, u.y + 60);
-            ctx.font = '18px "Libre Baskerville"';
-            ctx.fillText(u.value.toFixed(u.step < 1 ? 2 : 0), u.x + hw, u.y + 35);
-            ctx.strokeStyle = '#000';
+            ctx.font = '15px "Libre Baskerville"';
+            ctx.fillText(u.getDisplayValue(), u.x + hw, u.y + 35);
+            ctx.strokeStyle = '#a5a5a5ff';
             ctx.lineWidth = 12;
             ctx.arc(u.x + hw, u.y + 45, 35, Math.PI, 2 * Math.PI);
             ctx.stroke();

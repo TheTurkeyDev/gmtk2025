@@ -7,7 +7,7 @@ export function checkContinuousWallCollisions(walls: Wall[], ball: Ball, newX: n
     let closestCollision: { contactX: number, contactY: number } = { contactX: -1, contactY: -1 };
     let closestTime = Infinity;
 
-    const wall = walls.find(wall => {
+    const cWalls = walls.filter(wall => {
         const collision = getMovingCircleLineCollision(
             ball.x, ball.y, newX, newY, ball.size,
             wall.x1, wall.y1, wall.x2, wall.y2
@@ -22,6 +22,16 @@ export function checkContinuousWallCollisions(walls: Wall[], ball: Ball, newX: n
         return false;
     });
 
+    if (cWalls.length > 1)
+        //This is not a real solution, but it prevents the ball from going out of play?
+        return {
+            x: closestCollision.contactX - ball.vx, // Push slightly away from wall
+            y: closestCollision.contactY - ball.vy,
+            vx: -ball.vx,
+            vy: -ball.vy
+        };
+
+    const wall = cWalls.length > 0 ? cWalls[0] : undefined;
     if (wall) {
         // Calculate wall normal
         const wallDx = wall.x2 - wall.x1;

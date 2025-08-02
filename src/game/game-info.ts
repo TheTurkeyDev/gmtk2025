@@ -50,6 +50,8 @@ export const resetGameSettings = () => Object.keys(gameSettingsDef).forEach(key 
 export const playerInfoDef = {
     totalStrokes: 10,
     strokesLeft: 10,
+    strokesTaken: 0,
+    penaltyStrokes: 0,
     coins: 0
 };
 export const playerInfo = { ...playerInfoDef };

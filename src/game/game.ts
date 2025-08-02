@@ -53,8 +53,10 @@ export class Game {
         this.ball.isMoving = true;
         this.ballLastHitPos.x = this.ball.x;
         this.ballLastHitPos.y = this.ball.y;
-        if (this.courseHoleId.courseId !== -1)
+        if (this.courseHoleId.courseId !== -1) {
             playerInfo.strokesLeft -= 1;
+            playerInfo.strokesTaken += 1;
+        }
 
         this.isDragging = false;
         canvas.style.cursor = 'crosshair';
@@ -82,9 +84,10 @@ export class Game {
         ctx.beginPath();
         ctx.fillStyle = '#ffffff';
         ctx.font = '18px "Libre Baskerville"';
-        ctx.textAlign = 'center';
+        ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText(`STROKES: ${playerInfo.strokesLeft}`, 250, 20);
+        ctx.fillText(`STROKES LEFT: ${playerInfo.strokesLeft}`, 25, 20);
+        ctx.fillText(`STROKES TAKEN: ${playerInfo.strokesTaken + playerInfo.penaltyStrokes} (${playerInfo.penaltyStrokes} PEN.)`, 350, 20);
 
         ctx.beginPath();
         ctx.fillStyle = '#ffffff';
@@ -244,6 +247,7 @@ export class Game {
             this.ball.vy = 0;
             this.ball.isMoving = false;
             playerInfo.strokesLeft -= 1;
+            playerInfo.penaltyStrokes += 1;
             this.checkStrokes();
         }
 
@@ -337,10 +341,10 @@ export class Game {
     }
 
     resetToStart() {
-        const newRoom = loadCourseHole(0, 0);
+        const newRoom = loadCourseHole(-1, -1);
         this.courseHoleId = { courseId: -1, holeNum: -1 };
-        // const newRoom = loadCourseHole(1, 5);
-        // this.courseHoleId = { courseId: 1, holeNum: 5 };
+        // const newRoom = loadCourseHole(1, 18);
+        // this.courseHoleId = { courseId: 1, holeNum: 18 };
         if (newRoom)
             this.courseHole = newRoom;
 

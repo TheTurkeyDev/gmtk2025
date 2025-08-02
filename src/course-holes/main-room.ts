@@ -1,11 +1,9 @@
-import type { Room } from "../types/room";
+import type { CourseHole } from '../types/room';
 
-const roomData: Room = {
+const roomData: CourseHole = {
+    teeBox: { x: 500, y: 360 },
     holes: [
-        { dir: 'left', x: 100, y: 350, size: 10 },
-        { dir: 'up', x: 550, y: 100, size: 10 },
-        { dir: 'down', x: 550, y: 625, size: 10 },
-        { dir: 'right', x: 975, y: 350, size: 10 },
+        { nextHole: {courseId: 1, holeNum: 1}, x: 100, y: 350, size: 10, coins: 0 },
     ],
     walls: [
         { x1: 50, y1: 50, x2: 1025, y2: 50 },
@@ -41,6 +39,6 @@ const roomData: Room = {
             ]
         }
     ]
-}
+};
 
 export default roomData;

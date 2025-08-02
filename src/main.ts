@@ -10,6 +10,7 @@ const game = new Game();
 game.initGame();
 
 let ui: UI | null = new MainUI();
+// ui = null;
 
 let lastRender = 0;
 

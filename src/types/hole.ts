@@ -1,17 +1,23 @@
 import { gameSettings } from '../game/game-info';
-import type { DirectionType } from './direction';
+
+export type CourseHoleId = {
+    courseId: number,
+    holeNum: number
+}
+
 
 export type Hole = {
-    dir: DirectionType
+    nextHole: CourseHoleId
     x: number,
     y: number,
     size: number,
+    coins: number,
 }
 
 export function drawHole(hole: Hole, ctx: CanvasRenderingContext2D) {
     const size = hole.size + gameSettings.holeSizeInc;
     ctx.beginPath();
-    ctx.arc(hole.x, hole.y,size, 0, 2 * Math.PI);
+    ctx.arc(hole.x, hole.y, size, 0, 2 * Math.PI);
     ctx.fillStyle = '#ddd';
     ctx.fill();
     ctx.strokeStyle = '#fff';

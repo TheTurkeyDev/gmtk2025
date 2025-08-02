@@ -1,12 +1,11 @@
 import { gameSettings, playerInfo, resetGameSettings } from './game-info';
 import { checkContinuousWallCollisions, circleIntersectsLine, pointInPolygon } from '../phys/phys-helper';
-import { loadRoomData } from '../rooms/rooms-manager';
+import { loadCourseHole } from '../course-holes/holes-manager';
 import { drawBall, type Ball } from '../types/ball';
 import { drawCoin } from '../types/coin';
-import type { DirectionType } from '../types/direction';
-import { drawHole } from '../types/hole';
+import { drawHole, type CourseHoleId } from '../types/hole';
 import type { Position } from '../types/position';
-import type { Room } from '../types/room';
+import type { CourseHole } from '../types/room';
 import { drawSandTrap } from '../types/sand-trap';
 import { drawWall } from '../types/wall';
 import { drawWaterHazard } from '../types/water-hazard';
@@ -17,13 +16,12 @@ import { coinPickupSound, golfBallInHoleSound, golfBallWaterSound, golfPuttSound
 export class Game {
     ballLastHitPos: Position = { x: 0, y: 0 };
     ball: Ball = { x: 100, y: 100, size: 5, vx: 0, vy: 0, isMoving: false, color: '#0fffff' };
-    roomPos = { x: 0, y: 0 };
-    room: Room | null = null;
+    room: CourseHole | null = null;
 
     roomChanging = false;
     roomOffset: Position = { x: 0, y: 0 };
     roomOffsetDir: Position = { x: 0, y: 0 };
-    nextRoom: Room | null = null;
+    nextRoom: CourseHole | null = null;
 
     isDragging = false;
     mCurr = { x: -1, y: -1 };
@@ -109,18 +107,19 @@ export class Game {
         }
     }
 
-    renderRoom(ctx: CanvasRenderingContext2D, timestamp: number, room: Room, renderBall: boolean) {
-        //Walls
-        ctx.strokeStyle = '#8B4513';
-        ctx.lineWidth = 8;
-        ctx.lineCap = 'round';
-        room.walls.forEach(wall => drawWall(wall, ctx));
+    renderRoom(ctx: CanvasRenderingContext2D, timestamp: number, room: CourseHole, renderBall: boolean) {
 
         //Sand Traps
         room.sand.forEach(sand => drawSandTrap(sand, ctx));
 
         //Water Hazards
         room.water.forEach(water => drawWaterHazard(water, ctx, timestamp));
+
+        //Walls
+        ctx.strokeStyle = '#8B4513';
+        ctx.lineWidth = 8;
+        ctx.lineCap = 'round';
+        room.walls.forEach(wall => drawWall(wall, ctx));
 
         // Holes
         room.holes.forEach(hole => drawHole(hole, ctx));
@@ -260,12 +259,13 @@ export class Game {
             const holeSize = hole.size + gameSettings.holeSizeInc;
             const hr = (holeSize - (this.ball.size / 2));
             if (distToHole < hr) {
+                playerInfo.coins += hole.coins;
                 golfBallInHoleSound.play();
                 this.ball.vx = 0;
                 this.ball.vy = 0;
                 this.ball.isMoving = false;
                 if (playerInfo.strokesLeft > 0)
-                    this.moveToAdjRoom(hole.dir);
+                    this.moveToCourseHole(hole.nextHole);
             }
             else if (distToHole < holeSize) {
                 const dx = hole.x - this.ball.x;
@@ -316,51 +316,23 @@ export class Game {
         this.resetToStart();
     }
 
-    moveToAdjRoom(direction: DirectionType) {
+    moveToCourseHole(nextHole: CourseHoleId) {
         this.roomChanging = true;
         this.roomOffset = { x: 0, y: 0 };
-
-        switch (direction) {
-            case 'left':
-                this.roomOffsetDir = { x: gameSettings.roomChangeSpeed, y: 0 };
-                this.goToRoom(this.roomPos.x - 1, this.roomPos.y);
-                this.ball.x = 925;
-                this.ball.y = 350;
-                break;
-            case 'right':
-                this.roomOffsetDir = { x: -gameSettings.roomChangeSpeed, y: 0 };
-                this.goToRoom(this.roomPos.x + 1, this.roomPos.y);
-                this.ball.x = 150;
-                this.ball.y = 350;
-                break;
-            case 'up':
-                this.roomOffsetDir = { x: 0, y: gameSettings.roomChangeSpeed };
-                this.goToRoom(this.roomPos.x, this.roomPos.y + 1);
-                this.ball.x = 550;
-                this.ball.y = 575;
-                break;
-            case 'down':
-                this.roomOffsetDir = { x: 0, y: -gameSettings.roomChangeSpeed };
-                this.goToRoom(this.roomPos.x, this.roomPos.y - 1);
-                this.ball.x = 550;
-                this.ball.y = 150;
-                break;
-        }
-    }
-
-    goToRoom(x: number, y: number) {
-        this.roomPos = { x, y };
-        this.nextRoom = loadRoomData(x, y);
+        this.roomOffsetDir = { x: -gameSettings.roomChangeSpeed, y: 0 };
+        this.nextRoom = loadCourseHole(nextHole.courseId, nextHole.holeNum);
+        this.ball.x = this.nextRoom?.teeBox.x ?? 0;
+        this.ball.y = this.nextRoom?.teeBox.y ?? 0;
     }
 
     resetToStart() {
-        this.roomPos = { x: 0, y: 0 };
-        const newRoom = loadRoomData(0, 0);
+        const newRoom = loadCourseHole(0, 0);
+        // const newRoom = loadCourseHole(1, 2);
         if (newRoom)
             this.room = newRoom;
 
-        this.ball.x = 100;
-        this.ball.y = 100;
+        this.ball.x = newRoom?.teeBox?.x ?? 0;
+        this.ball.y =  newRoom?.teeBox?.y ?? 0;
         this.ball.vx = 0;
         this.ball.vy = 0;
         this.ball.isMoving = false;

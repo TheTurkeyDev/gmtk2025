@@ -6,7 +6,7 @@ export const music = new Audio('sounds/music.mp3');
 
 export let masterVolume = 0.75;
 export let sfxVolume = 0.75;
-export let musicVolume = 0.75;
+export let musicVolume = 0.5;
 
 export function initSounds() {
     music.loop = true;

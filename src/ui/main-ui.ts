@@ -11,7 +11,7 @@ export class MainUI implements UI {
             openUI(new StartPackUI());
         }),
         new Button(650, 300, 200, 50, '#33f', 'SETTINGS', '#fff', 20, () => {
-            openUI(new SettingsUI());
+            openUI(new SettingsUI(() => openUI(new MainUI())));
         })
     ];
 

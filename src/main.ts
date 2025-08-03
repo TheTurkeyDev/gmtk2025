@@ -1,6 +1,7 @@
 import { initSounds } from './audio/sounds';
 import { Game } from './game/game';
 import { MainUI } from './ui/main-ui';
+import { SettingsUI } from './ui/settings-ui';
 import type { UI } from './ui/ui-type';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement | undefined;
@@ -47,6 +48,11 @@ canvas?.addEventListener('mousemove', event => {
 
 // Prevent context menu on right click
 canvas?.addEventListener('contextmenu', event => event.preventDefault());
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape')
+        openUI(new SettingsUI(() => closeUI()));
+});
 
 function loop(timestamp: number) {
     render(timestamp);

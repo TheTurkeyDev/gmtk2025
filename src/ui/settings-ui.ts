@@ -1,13 +1,11 @@
 import { masterVolume, musicVolume, setMasterVolume, setMusicVolume, setSFXVolume, sfxVolume } from '../audio/sounds';
-import { openUI } from '../main';
 import { Button } from './components/button';
 import { Slider } from './components/slider';
-import { MainUI } from './main-ui';
 import type { UI } from './ui-type';
 
 export class SettingsUI implements UI {
     buttons: Button[] = [
-        new Button(440, 600, 200, 50, '#33f', 'BACK', '#fff', 20, () => openUI(new MainUI()))
+        new Button(440, 600, 200, 50, '#33f', 'BACK', '#fff', 20, () => this.onBack())
     ];
 
     sliders: Slider[] = [
@@ -33,6 +31,13 @@ export class SettingsUI implements UI {
             onChange: v => setMusicVolume(v / 100)
         })
     ];
+
+    private onBack: () => void;
+
+    constructor(onBack: () => void)
+    {
+        this.onBack = onBack;
+    }
 
     mouseDown(event: MouseEvent, canvas: HTMLCanvasElement) {
         const clicked = this.buttons.find(b => b.contains(event, canvas));
@@ -74,8 +79,8 @@ export class SettingsUI implements UI {
         ctx.textBaseline = 'middle';
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 2;
-        ctx.fillText('PUTT-LIKE', canvas.width / 2, 100);
-        ctx.strokeText('PUTT-LIKE', canvas.width / 2, 100);
+        ctx.fillText('SETTINGS', canvas.width / 2, 100);
+        ctx.strokeText('SETTINGS', canvas.width / 2, 100);
 
         this.buttons.forEach(b => b.render(ctx));
         this.sliders.forEach(s => s.render(ctx));

@@ -55,4 +55,4 @@ export const playerInfoDef = {
     coins: 0
 };
 export const playerInfo = { ...playerInfoDef };
-export const resetPlayerInfo = () => Object.keys((key: keyof typeof playerInfoDef) => playerInfo[key] = playerInfoDef[key]);
+export const resetPlayerInfo = () => Object.keys(playerInfoDef).forEach(key => playerInfo[key as keyof typeof playerInfoDef] = playerInfoDef[key as keyof typeof playerInfoDef]);

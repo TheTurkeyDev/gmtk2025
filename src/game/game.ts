@@ -1,4 +1,4 @@
-import { gameSettings, playerInfo, resetGameSettings } from './game-info';
+import { gameSettings, playerInfo, resetGameSettings, resetPlayerInfo } from './game-info';
 import { checkContinuousWallCollisions, circleIntersectsLine, pointInPolygon } from '../phys/phys-helper';
 import { loadCourseHole } from '../course-holes/holes-manager';
 import { drawBall, type Ball } from '../types/ball';
@@ -13,6 +13,8 @@ import { openUI } from '../main';
 import { ShopUI } from '../ui/shop-ui';
 import { coinPickupSound, golfBallInHoleSound, golfBallWaterSound, golfPuttSound } from '../audio/sounds';
 import { drawHomeText } from '../types/hole-text';
+import { GameOverUI } from '../ui/game-over-ui';
+import { TextEffect } from './text-effect';
 
 export class Game {
     ballLastHitPos: Position = { x: 0, y: 0 };
@@ -27,6 +29,8 @@ export class Game {
 
     isDragging = false;
     mCurr = { x: -1, y: -1 };
+
+    textEffects: TextEffect[] = [];
 
     public mouseDown(event: MouseEvent, canvas: HTMLCanvasElement) {
         if (this.ball.isMoving)
@@ -75,7 +79,7 @@ export class Game {
         if (!this.courseHole)
             return;
 
-        ctx.fillStyle = '#1c6c1cff';
+        ctx.fillStyle = '#1c6c1c';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = '#00000074';
@@ -184,9 +188,15 @@ export class Game {
         // Ball
         if (renderBall)
             drawBall(this.ball, ctx);
+
+        this.textEffects.forEach(te => te.render(ctx));
+        this.textEffects = this.textEffects.filter(te => !te.done());
     }
 
     update(delta: number, width: number, height: number) {
+
+        this.textEffects.forEach(te => te.update(delta));
+
         if (this.roomChanging) {
             this.roomOffset.x += this.roomOffsetDir.x * delta;
             this.roomOffset.y += this.roomOffsetDir.y * delta;
@@ -208,10 +218,14 @@ export class Game {
 
         if (toCollect && toCollect.length > 0 && this.courseHole) {
             toCollect.forEach(c => {
-                if (c.type === 0)
+                if (c.type === 0) {
+                    this.textEffects.push(new TextEffect('+1 Coin', this.ball.x, this.ball.y, 1));
                     playerInfo.coins += 1;
-                else if (c.type === 1)
+                }
+                else if (c.type === 1) {
+                    this.textEffects.push(new TextEffect('+5 Coin', this.ball.x, this.ball.y, 1));
                     playerInfo.coins += 5;
+                }
             });
 
             this.courseHole.coins = this.courseHole.coins.filter(c => !toCollect.find(cc => cc.x === c.x && cc.y === c.y));
@@ -237,10 +251,11 @@ export class Game {
             this.ball.y = newY;
         }
 
-        const inWaterHazard = this.courseHole?.water?.some(w => pointInPolygon(this.ball.x, this.ball.y, w.points)) ?? false;
+        const inWaterHazard = this.courseHole?.water?.find(w => pointInPolygon(this.ball.x, this.ball.y, w.points)) ?? false;
 
         if (inWaterHazard) {
             golfBallWaterSound.play();
+            this.textEffects.push(new TextEffect('+1 Stroke Penalty', this.ball.x, this.ball.y, 1));
             this.ball.x = this.ballLastHitPos.x;
             this.ball.y = this.ballLastHitPos.y;
             this.ball.vx = 0;
@@ -327,11 +342,12 @@ export class Game {
     }
 
     initGame() {
-        resetGameSettings();
-        this.resetToStart();
+        this.fullReset();
     }
 
     moveToCourseHole(nextHole: CourseHoleId) {
+        if (nextHole.holeNum === 19)
+            openUI(new GameOverUI());
         this.roomChanging = true;
         this.roomOffset = { x: 0, y: 0 };
         this.roomOffsetDir = { x: -gameSettings.roomChangeSpeed, y: 0 };
@@ -355,5 +371,11 @@ export class Game {
         this.ball.vy = 0;
         this.ball.isMoving = false;
         playerInfo.strokesLeft = playerInfo.totalStrokes;
+    }
+
+    fullReset() {
+        resetGameSettings();
+        this.resetToStart();
+        resetPlayerInfo();
     }
 }

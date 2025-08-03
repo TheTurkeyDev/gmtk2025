@@ -3,7 +3,7 @@ import type { CourseHole } from '../types/room';
 const roomData: CourseHole = {
     teeBox: { x: 500, y: 360 },
     holes: [
-        { nextHole: {courseId: 1, holeNum: 1}, x: 100, y: 350, size: 10, coins: 0 },
+        { nextHole: {courseId: 1, holeNum: 1}, x: 100, y: 360, size: 10, coins: 0 },
     ],
     walls: [
         { x1: 50, y1: 50, x2: 1025, y2: 50 },

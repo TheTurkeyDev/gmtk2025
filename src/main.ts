@@ -12,7 +12,6 @@ game.initGame();
 
 let ui: UI | null = new MainUI();
 // ui = null;
-// ui = new ShopUI();
 
 let lastRender = 0;
 
@@ -85,6 +84,10 @@ export function openUI(newUI: UI) {
     ui = newUI;
 }
 
+export function fullReset()
+{
+    game.fullReset();
+}
 
 initSounds();
 window.requestAnimationFrame(loop);

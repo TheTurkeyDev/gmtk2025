@@ -1,17 +1,27 @@
+import { music } from '../audio/sounds';
 import { openUI } from '../main';
 import { Button } from './components/button';
+import { SettingsUI } from './settings-ui';
 import { StartPackUI } from './start-pack-ui';
 import type { UI } from './ui-type';
 
 export class MainUI implements UI {
     buttons: Button[] = [
-        new Button(200, 300, 200, 50, '#33f', 'START', '#fff', 20, () => openUI(new StartPackUI()))
+        new Button(250, 300, 200, 50, '#33f', 'START', '#fff', 20, () => {
+            openUI(new StartPackUI());
+        }),
+        new Button(650, 300, 200, 50, '#33f', 'SETTINGS', '#fff', 20, () => {
+            openUI(new SettingsUI());
+        })
     ];
 
     mouseDown(event: MouseEvent, canvas: HTMLCanvasElement) {
         const clicked = this.buttons.find(b => b.contains(event, canvas));
         if (clicked)
             clicked.onClick();
+
+        if (music.paused)
+            music.play();
     }
 
     mouseUp(_: MouseEvent, __: HTMLCanvasElement) {

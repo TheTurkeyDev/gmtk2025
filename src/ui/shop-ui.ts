@@ -69,11 +69,11 @@ class ShopUpgrade {
 export class ShopUI implements UI {
 
     upgrades: ShopUpgrade[] = [
-        new ShopUpgrade(0, 'Hole Size', 200, 200, gameSettingsDef.holeSizeInc.initial, 1, gameSettingsDef.holeSizeInc.max, 5, 500, () => gameSettings.holeSizeInc),
-        new ShopUpgrade(1, 'Shot Power', 400, 200, gameSettingsDef.shotStrength.initial, 1, gameSettingsDef.shotStrength.max, 1, 100, () => gameSettings.shotStrength),
-        new ShopUpgrade(2, 'Friction %', 600, 200, gameSettingsDef.friction.initial, 0.001, gameSettingsDef.friction.max, 2, 100, () => gameSettings.friction, (value) => `${((1 - value) * 100).toFixed(1)}%`),
-        new ShopUpgrade(3, 'Bunker Friction %', 800, 200, gameSettingsDef.sandFriction.initial, 0.005, gameSettingsDef.sandFriction.max, 5, 75, () => gameSettings.sandFriction, (value) => `${((1 - value) * 100).toFixed(1)}%`),
-        new ShopUpgrade(4, 'Wall Bounce Loss %', 200, 400, gameSettingsDef.wallEnergyLoss.initial, 0.01, gameSettingsDef.wallEnergyLoss.max, 1, 200, () => gameSettings.wallEnergyLoss, (value) => `${((1 - value) * 100).toFixed(1)}%`),
+        new ShopUpgrade(0, 'Hole Size', 200, 200, gameSettingsDef.holeSizeInc.initial, 1, gameSettingsDef.holeSizeInc.max, 5, 100, () => gameSettings.holeSizeInc),
+        new ShopUpgrade(1, 'Shot Power', 400, 200, gameSettingsDef.shotStrength.initial, 1, gameSettingsDef.shotStrength.max, 1, 50, () => gameSettings.shotStrength),
+        new ShopUpgrade(2, 'Friction %', 600, 200, gameSettingsDef.friction.initial, 0.003, gameSettingsDef.friction.max, 2, 50, () => gameSettings.friction, (value) => `${((1 - value) * 100).toFixed(1)}%`),
+        new ShopUpgrade(3, 'Bunker Friction %', 800, 200, gameSettingsDef.sandFriction.initial, 0.005, gameSettingsDef.sandFriction.max, 5, 50, () => gameSettings.sandFriction, (value) => `${((1 - value) * 100).toFixed(1)}%`),
+        new ShopUpgrade(4, 'Wall Bounce Loss %', 200, 400, gameSettingsDef.wallEnergyLoss.initial, 0.01, gameSettingsDef.wallEnergyLoss.max, 1, 75, () => gameSettings.wallEnergyLoss, (value) => `${((1 - value) * 100).toFixed(1)}%`),
         new ShopUpgrade(5, 'Strokes', 400, 400, playerInfoDef.totalStrokes, 1, 999, 1, 1000, () => playerInfo.totalStrokes)
     ];
 

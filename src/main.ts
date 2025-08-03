@@ -1,4 +1,4 @@
-import { coinPickupSound, golfBallInHoleSound, golfBallWaterSound, golfPuttSound } from './audio/sounds';
+import { initSounds } from './audio/sounds';
 import { Game } from './game/game';
 import { MainUI } from './ui/main-ui';
 import type { UI } from './ui/ui-type';
@@ -11,6 +11,7 @@ game.initGame();
 
 let ui: UI | null = new MainUI();
 // ui = null;
+// ui = new ShopUI();
 
 let lastRender = 0;
 
@@ -23,6 +24,14 @@ canvas?.addEventListener('mousedown', event => {
 });
 
 canvas?.addEventListener('mouseup', event => {
+    if (ui)
+        ui.mouseUp(event, canvas);
+    else
+        game.mouseUp(event, canvas);
+});
+
+
+canvas?.addEventListener('mouseleave', event => {
     if (ui)
         ui.mouseUp(event, canvas);
     else
@@ -71,12 +80,5 @@ export function openUI(newUI: UI) {
 }
 
 
-function setSoundVolume(volume: number) {
-    golfBallInHoleSound.volume = volume;
-    golfPuttSound.volume = volume;
-    golfBallWaterSound.volume = volume;
-    coinPickupSound.volume = volume * 0.4;
-}
-
-setSoundVolume(0.75); //TODO remove? At least give option to change value
+initSounds();
 window.requestAnimationFrame(loop);

@@ -22,6 +22,7 @@ export class Button {
     }
 
     public render(ctx: CanvasRenderingContext2D) {
+        ctx.beginPath();
         ctx.fillStyle = this.backgroundColor;
         ctx.roundRect(this.x, this.y, this.width, this.height, 5);
         ctx.fill();

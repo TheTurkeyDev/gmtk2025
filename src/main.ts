@@ -32,12 +32,12 @@ canvas?.addEventListener('mouseup', event => {
 });
 
 
-canvas?.addEventListener('mouseleave', event => {
-    if (ui)
-        ui.mouseUp(event, canvas);
-    else
-        game.mouseUp(event, canvas);
-});
+// canvas?.addEventListener('mouseleave', event => {
+//     if (ui)
+//         ui.mouseUp(event, canvas);
+//     else
+//         game.mouseUp(event, canvas);
+// });
 
 canvas?.addEventListener('mousemove', event => {
     if (ui)

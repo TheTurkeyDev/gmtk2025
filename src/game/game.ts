@@ -309,9 +309,10 @@ export class Game {
         }
     }
 
+    private ballPickRadInc = 5;
     isClickOnBall(mX: number, mY: number) {
         const distance = Math.sqrt(Math.pow(mX - this.ball.x, 2) + Math.pow(mY - this.ball.y, 2));
-        return distance <= this.ball.size;
+        return distance <= this.ball.size + this.ballPickRadInc;
     }
 
     calcShotInfo() {

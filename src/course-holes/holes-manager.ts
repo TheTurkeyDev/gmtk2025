@@ -22,10 +22,27 @@ import course1H7 from './classic/classic-7';
 import course1H8 from './classic/classic-8';
 import course1H9 from './classic/classic-9';
 import mainRoom from './main-room';
+import tutorialH1 from './tutorial/tutorial-1';
+import tutorialH2 from './tutorial/tutorial-2';
+import tutorialH3 from './tutorial/tutorial-3';
+import tutorialH4 from './tutorial/tutorial-4';
 
 export function loadCourseHole(courseID: number, holeNum: number): CourseHole | null {
-
-    if (courseID === 1) {
+    if (courseID === 0) {
+        if (holeNum === 1) {
+            return { ...tutorialH1 };
+        }
+        if (holeNum === 2) {
+            return { ...tutorialH2 };
+        }
+        if (holeNum === 3) {
+            return { ...tutorialH3 };
+        }
+        if (holeNum === 4) {
+            return { ...tutorialH4 };
+        }
+    }
+    else if (courseID === 1) {
         if (holeNum === 1)
             return { ...course1H1 };
         if (holeNum === 2)
@@ -72,7 +89,7 @@ export function loadCourseHole(courseID: number, holeNum: number): CourseHole | 
             return { ...course1H173 };
         if (holeNum === 174)
             return { ...course1H174 };
-        
+
     }
     return mainRoom;
 }

@@ -30,7 +30,7 @@ const course1H7: CourseHole = {
         { type: 1, x: 620, y: 525, size: 10 },
         { type: 1, x: 460, y: 525, size: 10 },
         { type: 0, x: 540, y: 275, size: 10 },
-        { type: 0, x: 540, y: 375, size: 10 },
+        { type: 1, x: 540, y: 375, size: 10 },
         { type: 0, x: 540, y: 475, size: 10 },
         { type: 1, x: 540, y: 125, size: 10 },
         { type: 1, x: 540, y: 150, size: 10 },

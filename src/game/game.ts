@@ -57,7 +57,7 @@ export class Game {
         this.ball.isMoving = true;
         this.ballLastHitPos.x = this.ball.x;
         this.ballLastHitPos.y = this.ball.y;
-        if (this.courseHoleId.courseId !== -1) {
+        if (this.courseHoleId.courseId > 0) {
             playerInfo.strokesLeft -= 1;
             playerInfo.strokesTaken += 1;
         }
@@ -360,8 +360,8 @@ export class Game {
     resetToStart() {
         const newRoom = loadCourseHole(-1, -1);
         this.courseHoleId = { courseId: -1, holeNum: -1 };
-        // const newRoom = loadCourseHole(1, 18);
-        // this.courseHoleId = { courseId: 1, holeNum: 18 };
+        // const newRoom = loadCourseHole(1, 11);
+        // this.courseHoleId = { courseId: 1, holeNum: 11 };
         if (newRoom)
             this.courseHole = newRoom;
 
